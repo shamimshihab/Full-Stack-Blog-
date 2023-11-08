@@ -6,8 +6,8 @@ import { Box } from "@mui/material";
 export default function Footer() {
   return (
     <>
-      <Box style={{ display: "flex", justifyContent: "center" }}>
-        <p> Shamim @2023</p>
+      <Box className="footer-container">
+        <p> Shamim @2024</p>
       </Box>
     </>
   );
