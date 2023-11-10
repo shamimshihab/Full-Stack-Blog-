@@ -5,25 +5,22 @@ a {
   cursor: pointer;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  margin: 0;
-}
-
 img {
   max-width: 100%;
 }
+body {
+  overflow-x: hidden;
+}
+
 main {
   padding: 1px;
   flex: 1;
-  max-width: 960px;
+  max-width: 1000px;
   margin: 0 auto;
   height: 100dvh;
   overflow: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgb(9, 189, 235) rgb(18, 158, 252);
+  scrollbar-color: rgb(37, 123, 145) rgb(18, 158, 252);
   /* border: 1px solid red; */
 }
 
@@ -33,7 +30,7 @@ main::-webkit-scrollbar {
 
 main::-webkit-scrollbar-thumb {
   background-color: darkgray;
-  border-radius: 1px;
+  border-radius: 0px;
 }
 
 main::-webkit-scrollbar-thumb:hover {
@@ -73,7 +70,14 @@ div.post {
     grid-template-columns: 0.9fr 1.1fr;
   }
 }
+.textsBox {
+  display: flex;
+  justify-content: center;
 
+  align-items: left;
+
+  flex-direction: column;
+}
 div.post div.texts h2 {
   margin: 0;
   font-size: 2rem;
@@ -82,7 +86,7 @@ div.post div.texts a {
   text-decoration: none;
   /* color: inherit; */
 }
-div.post p.info {
+.infoDetails {
   margin: 24px 0;
   color: #888;
   font-size: 1rem;
@@ -126,17 +130,19 @@ form.login h1,
 form.register h1 {
   text-align: center;
 }
+.postImagePhoto {
+  max-height: 550px;
+  width: auto;
+  height: auto;
+}
 
 div.post-page div.image {
   max-height: 300px;
   display: flex;
   overflow: hidden;
+  max-width: 100%;
 }
-div.post-page div.image img {
-  object-fit: cover;
-  object-position: center center;
-  width: 100%;
-}
+
 div.post-page a {
   text-decoration: underline;
 }

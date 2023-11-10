@@ -29,10 +29,7 @@ function App() {
   const toggleTheme = () => {
     setIsDarkTheme((prevTheme) => !prevTheme);
   };
-  console.log("theme", theme);
-  console.log("isDarkTheme", isDarkTheme);
-  console.log("darkTheme", darkTheme);
-  console.log("lightTheme ", lightTheme);
+
   return (
     <UserContextProvider>
       <ThemeProvider theme={theme}>

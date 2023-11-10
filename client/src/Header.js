@@ -16,6 +16,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 export default function Header({ toggleTheme }) {
   const { setUserInfo, userInfo } = useContext(UserContext);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     fetch("http://localhost:4000/profile", {
       credentials: "include",
@@ -46,46 +47,62 @@ export default function Header({ toggleTheme }) {
           <nav>
             {username && (
               <>
+                <Link to="/">
+                  <Button style={{ textTransform: "none" }}>Home</Button>
+                </Link>
+
                 <Link to="/create">
-                  <Button style={{ textTransform: "none" }}>
+                  <Button
+                    style={{ textTransform: "none", whiteSpace: "nowrap" }}
+                  >
                     Create new post
                   </Button>
                 </Link>
 
-                <Button style={{ textTransform: "none" }} onClick={logout}>
+                <Button
+                  style={{ textTransform: "none", whiteSpace: "nowrap" }}
+                  onClick={logout}
+                >
                   Logout{" "}
                 </Button>
               </>
             )}
             {!username && (
               <>
+                <Link to="/">
+                  <Button style={{ textTransform: "none" }}>Home</Button>
+                </Link>
                 <Link to="/login">
                   {" "}
                   <Button style={{ textTransform: "none" }}>Login</Button>
                 </Link>
                 <Link to="/register">
-                  <Button>Register</Button>
+                  <Button style={{ textTransform: "none" }}>Register</Button>
                 </Link>
               </>
             )}
 
-            <Button
-              sx={{ ml: 1, textTransform: "none" }}
-              onClick={toggleTheme}
-              color="inherit"
-            >
-              {theme.palette.mode === "dark" ? (
-                <>
-                  <Typography> {theme.palette.mode} mode </Typography>{" "}
-                  <Brightness7Icon />
-                </>
-              ) : (
-                <>
-                  <Typography> {theme.palette.mode} mode </Typography>{" "}
-                  <Brightness4Icon />
-                </>
-              )}
-            </Button>
+            {theme.palette.mode === "dark" ? (
+              <>
+                <Button
+                  varai
+                  sx={{ ml: 1, textTransform: "none", whiteSpace: "nowrap" }}
+                  onClick={toggleTheme}
+                >
+                  {" "}
+                  Dark mode <Brightness7Icon />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  sx={{ ml: 1, textTransform: "none", whiteSpace: "nowrap" }}
+                  onClick={toggleTheme}
+                >
+                  Light mode <Brightness4Icon />
+                </Button>
+              </>
+            )}
           </nav>
         </Hidden>
 
@@ -117,15 +134,52 @@ export default function Header({ toggleTheme }) {
                 <List style={{}}>
                   <Link to="/create">
                     {" "}
-                    <Button onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button
+                      style={{ textTransform: "none" }}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       Create new post
                     </Button>
                   </Link>
 
                   <ListItem onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button onClick={logout}>Logout ({username})</Button>
+                    <Button style={{ textTransform: "none" }} onClick={logout}>
+                      Logout ({username})
+                    </Button>
                   </ListItem>
-                  <Button onClick={() => setIsMobileMenuOpen(false)}>
+                  {theme.palette.mode === "dark" ? (
+                    <>
+                      <Button
+                        varai
+                        sx={{
+                          ml: 1,
+                          textTransform: "none",
+                          whiteSpace: "nowrap",
+                        }}
+                        onClick={toggleTheme}
+                      >
+                        {" "}
+                        Dark mode <Brightness7Icon />
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        sx={{
+                          ml: 1,
+                          textTransform: "none",
+                          whiteSpace: "nowrap",
+                        }}
+                        onClick={toggleTheme}
+                      >
+                        Light mode <Brightness4Icon />
+                      </Button>
+                    </>
+                  )}
+                  <Button
+                    style={{ textTransform: "none" }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
                     Close
                   </Button>
                 </List>
@@ -137,17 +191,51 @@ export default function Header({ toggleTheme }) {
                 <List>
                   <Link to="/login">
                     <Button onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button>Login</Button>
+                      <Button style={{ textTransform: "none" }}>Login</Button>
                     </Button>
                   </Link>
 
                   <Link to="/register">
-                    <Button onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button
+                      style={{ textTransform: "none" }}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       Register
                     </Button>
                   </Link>
-
-                  <Button onClick={() => setIsMobileMenuOpen(false)}>
+                  {theme.palette.mode === "dark" ? (
+                    <>
+                      <Button
+                        varai
+                        sx={{
+                          ml: 1,
+                          textTransform: "none",
+                          whiteSpace: "nowrap",
+                        }}
+                        onClick={toggleTheme}
+                      >
+                        {" "}
+                        Dark mode <Brightness7Icon />
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        sx={{
+                          ml: 1,
+                          textTransform: "none",
+                          whiteSpace: "nowrap",
+                        }}
+                        onClick={toggleTheme}
+                      >
+                        Light mode <Brightness4Icon />
+                      </Button>
+                    </>
+                  )}
+                  <Button
+                    style={{ textTransform: "none" }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
                     Close
                   </Button>
                 </List>
