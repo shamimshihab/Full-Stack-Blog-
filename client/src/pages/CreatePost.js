@@ -3,7 +3,25 @@ import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import Editor from "../Editor";
-
+import {
+  Container,
+  CssBaseline,
+  Typography,
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Alert,
+  AlertTitle,
+  FormLabel,
+  FormControl,
+  InputAdornment,
+  IconButton,
+  OutlinedInput,
+  Box,
+  Paper,
+} from "@mui/material";
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -31,22 +49,43 @@ export default function CreatePost() {
     return <Navigate to={"/"} />;
   }
   return (
-    <form onSubmit={createNewPost}>
-      <input
-        type="title"
-        placeholder={"Title"}
-        value={title}
-        onChange={(ev) => setTitle(ev.target.value)}
-      />
-      <input
-        type="summary"
-        placeholder={"Summary"}
-        value={summary}
-        onChange={(ev) => setSummary(ev.target.value)}
-      />
-      <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
-      <Editor value={content} onChange={setContent} />
-      <button style={{ marginTop: "5px" }}>Create post</button>
-    </form>
+    <Paper
+      className="home-page-container"
+      style={{
+        minHeight: "85vh",
+
+        padding: 10,
+      }}
+      elevation={3}
+    >
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        <form onSubmit={createNewPost}>
+          <input
+            type="title"
+            placeholder={"Title"}
+            value={title}
+            onChange={(ev) => setTitle(ev.target.value)}
+          />
+          <input
+            type="summary"
+            placeholder={"Summary"}
+            value={summary}
+            onChange={(ev) => setSummary(ev.target.value)}
+          />
+          <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
+          <div style={{ maxWidth: "800px" }}>
+            <Editor value={content} onChange={setContent} />
+          </div>
+          <button style={{ marginTop: "5px" }}>Create post</button>
+        </form>
+      </Box>
+    </Paper>
   );
 }

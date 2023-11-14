@@ -13,9 +13,8 @@ body {
 }
 
 main {
-  padding: 1px;
   flex: 1;
-  max-width: 1000px;
+  /* max-width: 1000px; */
   margin: 0 auto;
   height: 100dvh;
   overflow: auto;
@@ -43,8 +42,8 @@ main::-webkit-scrollbar-track {
 header {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
-  margin-bottom: 50px;
+  max-width: 1000px;
+  margin: 0 auto;
   align-items: center;
 }
 header a {
@@ -57,6 +56,11 @@ header a.logo {
 header nav {
   display: flex;
   gap: 24px;
+}
+
+.home-page-container {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 div.post {
@@ -80,14 +84,15 @@ div.post {
 }
 div.post div.texts h2 {
   margin: 0;
-  font-size: 2rem;
+  padding: 0;
+  font-size: 1rem;
 }
 div.post div.texts a {
   text-decoration: none;
   /* color: inherit; */
 }
 .infoDetails {
-  margin: 24px 0;
+  /* margin: 12px 0; */
   color: #888;
   font-size: 1rem;
   font-weight: bold;
@@ -131,13 +136,20 @@ form.register h1 {
   text-align: center;
 }
 .postImagePhoto {
-  max-height: 550px;
-  width: auto;
-  height: auto;
-}
+  max-height: 40vh;
 
+  /* object-fit: contain; */
+}
+.index-Image {
+  border-radius: 8px;
+  object-fit: contain;
+  height: "100%";
+  max-height: 28vh;
+
+  width: 100%;
+}
 div.post-page div.image {
-  max-height: 300px;
+  max-height: 30vh;
   display: flex;
   overflow: hidden;
   max-width: 100%;
@@ -195,4 +207,8 @@ a svg {
 
   padding: 20px;
   margin-top: auto;
+}
+.post-content {
+  display: "flex";
+  justify-content: center;
 }

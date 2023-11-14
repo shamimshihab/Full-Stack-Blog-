@@ -1,7 +1,7 @@
 import Post from "../Post";
 import { useEffect, useState } from "react";
 
-import { Typography, Box, Paper, Button } from "@mui/material";
+import { Typography, Paper, Button, Box } from "@mui/material";
 export default function IndexPage() {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
@@ -11,5 +11,11 @@ export default function IndexPage() {
       });
     });
   }, []);
-  return <> {posts.length > 0 && posts.map((post) => <Post {...post} />)}</>;
+  return (
+    <>
+      <Paper className="home-page-container" style={{ minHeight: "85vh" }}>
+        {posts.length > 0 && posts.map((post) => <Post {...post} />)}
+      </Paper>
+    </>
+  );
 }
