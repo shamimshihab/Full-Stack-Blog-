@@ -12,8 +12,8 @@ export default function Post({
   author,
 }) {
   return (
-    <Paper style={{ margin: 3, padding: 3 }}>
-      <Grid container spacing={1}>
+    <Paper elevation={3} style={{ margin: 5, padding: 5 }}>
+      <Grid container spacing={2}>
         <Grid
           item
           style={{
@@ -24,21 +24,41 @@ export default function Post({
           sm={12}
           md={6}
         >
-          <div className="image">
+          <div>
             <Link to={`/post/${_id}`}>
-              <img src={"http://localhost:4000/" + cover} alt="" />
+              <img
+                className="index-Image"
+                src={"http://localhost:4000/" + cover}
+                alt=""
+              />
             </Link>
           </div>
         </Grid>
-        <Grid item sm={12} md={6}>
-          <Box
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+        <Grid
+          item
+          sm={12}
+          md={6}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            // "@media (max-width: 720px)": {
+            //   alignItems: "center",
+            // },
+          }}
+        >
+          <Box>
             <Link to={`/post/${_id}`}>
-              <h2>{title.substring(0, 25)}</h2>
+              <Button
+                style={{
+                  textTransform: "none",
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                <h2>{title.substring(0, 25)}</h2>
+              </Button>
             </Link>
             <p className="infoDetails ">
               User : <a className="author">{author.username}</a>
@@ -50,8 +70,8 @@ export default function Post({
                 variant="contained"
                 style={{
                   margin: 0,
-                  padding: 0,
-                  width: "25%",
+                  padding: "4px",
+                  width: "50%",
                   textTransform: "none",
                 }}
               >
