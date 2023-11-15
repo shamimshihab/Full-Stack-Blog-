@@ -88,7 +88,12 @@ export default function CreatePost() {
           <div style={{ maxWidth: "800px" }}>
             <Editor value={content} onChange={setContent} />
           </div>
-          <button style={{ marginTop: "5px" }}>Create post</button>
+          <Button
+            variant="outlined"
+            style={{ textTransform: "none", marginTop: 10 }}
+          >
+            Create post
+          </Button>
         </form>
       </Box>
     </Paper>
