@@ -94,17 +94,18 @@ div.post div.texts a {
 .infoDetails {
   /* margin: 12px 0; */
   color: #888;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: bold;
   display: flex;
-  gap: 10px;
+  gap: 6px;
+  margin: 3px;
 }
 /* div.post p.info a.author {
   color: #333;
 } */
-div.post p.summary {
-  margin: 10px 0;
-  line-height: 1.8rem;
+.summary {
+  margin: 15px 0;
+  line-height: 2rem;
 }
 
 form.login,
@@ -201,14 +202,45 @@ a svg {
 }
 .footer-container {
   display: flex;
-  justify-content: center;
-  position: relative;
-  width: 100%;
-
-  padding: 20px;
-  margin-top: auto;
+  justify-content: space-between;
+  max-width: 1000px;
+  margin: 0 auto;
+  align-items: center;
 }
+
 .post-content {
-  display: "flex";
   justify-content: center;
+}
+
+.icon {
+  margin: 0.5rem;
+  font-size: 30px;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.icon-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
+  align-items: center;
+}
+.my-photo {
+  margin: 8px;
+  padding: 8px;
+  border-radius: 20px;
+}
+.my-description {
+  display: flex;
+  justify-content: center;
+  margin: 16px;
+  padding: 16px;
+}
+.footeer-first-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
+  align-items: center;
 }

@@ -47,6 +47,7 @@ export default function Header({ toggleTheme }) {
           padding: "1rem 0rem 1rem",
           position: "sticky",
           top: 0,
+          zIndex: 1000,
         }}
       >
         <header>
@@ -72,7 +73,13 @@ export default function Header({ toggleTheme }) {
                       Create new post
                     </Button>
                   </Link>
-
+                  <Link to="/about">
+                    <Button
+                      style={{ textTransform: "none", whiteSpace: "nowrap" }}
+                    >
+                      About Me
+                    </Button>
+                  </Link>
                   <Button
                     style={{ textTransform: "none", whiteSpace: "nowrap" }}
                     onClick={logout}
@@ -85,6 +92,13 @@ export default function Header({ toggleTheme }) {
                 <>
                   <Link to="/">
                     <Button style={{ textTransform: "none" }}>Home</Button>
+                  </Link>
+                  <Link to="/about">
+                    <Button
+                      style={{ textTransform: "none", whiteSpace: "nowrap" }}
+                    >
+                      About Me
+                    </Button>
                   </Link>
                   <Link to="/login">
                     {" "}
@@ -148,6 +162,14 @@ export default function Header({ toggleTheme }) {
               {username && (
                 <>
                   <List style={{}}>
+                    <Link to="/">
+                      <Button
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        style={{ textTransform: "none" }}
+                      >
+                        Home
+                      </Button>
+                    </Link>
                     <Link to="/create">
                       {" "}
                       <Button
@@ -155,6 +177,11 @@ export default function Header({ toggleTheme }) {
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Create new post
+                      </Button>
+                    </Link>
+                    <Link to="/about">
+                      <Button style={{ textTransform: "none" }}>
+                        About Me
                       </Button>
                     </Link>
 
@@ -208,6 +235,14 @@ export default function Header({ toggleTheme }) {
               {!username && (
                 <>
                   <List>
+                    <Link to="/">
+                      <Button style={{ textTransform: "none" }}>Home</Button>
+                    </Link>
+                    <Link to="/about">
+                      <Button style={{ textTransform: "none" }}>
+                        About Me
+                      </Button>
+                    </Link>
                     <Link to="/login">
                       <Button onClick={() => setIsMobileMenuOpen(false)}>
                         <Button style={{ textTransform: "none" }}>Login</Button>

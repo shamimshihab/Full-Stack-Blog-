@@ -12,6 +12,7 @@ import PostPage from "./pages/PostPage";
 import EditPost from "./pages/EditPost";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useState } from "react";
+import AboutMe from "./pages/AboutMe";
 const lightTheme = createTheme({
   palette: {
     mode: "light",
@@ -38,6 +39,7 @@ function App() {
             <Route index element={<IndexPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/about" element={<AboutMe />} />
 
             <Route path="/create" element={<CreatePost />} />
 
