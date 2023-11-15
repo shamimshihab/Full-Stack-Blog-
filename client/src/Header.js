@@ -84,7 +84,7 @@ export default function Header({ toggleTheme }) {
                     style={{ textTransform: "none", whiteSpace: "nowrap" }}
                     onClick={logout}
                   >
-                    Logout{" "}
+                    Logout({username})
                   </Button>
                 </>
               )}
