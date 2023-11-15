@@ -53,7 +53,12 @@ export default function SimilarPostItem({
               </Link>
             </Typography>
 
-            <Typography variant="body2">{summary.substring(0, 10)}</Typography>
+            <Typography variant="body2">
+              {(
+                new DOMParser().parseFromString(content, "text/html").body
+                  .textContent || ""
+              ).substring(0, 30)}
+            </Typography>
 
             <Link to={`/post/${_id}`}>
               <Button
@@ -65,7 +70,6 @@ export default function SimilarPostItem({
                   textTransform: "none",
                   whiteSpace: "nowrap",
                 }}
-                onClick={console.log("buttonClicked")}
                 size="small"
               >
                 Read more

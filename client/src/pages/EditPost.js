@@ -19,6 +19,8 @@ import {
   IconButton,
   OutlinedInput,
   Paper,
+  Input,
+  Box,
 } from "@mui/material";
 
 export default function EditPost() {
@@ -67,25 +69,42 @@ export default function EditPost() {
     <Paper
       className="home-page-container"
       elevation={3}
-      style={{ minHeight: "90vh" }}
+      style={{ minHeight: "90vh", padding: 20 }}
     >
-      <form onSubmit={updatePost}>
-        <input
-          type="title"
-          placeholder={"Title"}
-          value={title}
-          onChange={(ev) => setTitle(ev.target.value)}
-        />
-        <input
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        <form onSubmit={updatePost}>
+          <TextField
+            label="Write Your Title Here"
+            variant="outlined"
+            fullWidth
+            value={title}
+            onChange={(ev) => setTitle(ev.target.value)}
+            style={{ marginBottom: "10px" }}
+          />
+          {/* <input
           type="summary"
           placeholder={"Summary"}
           value={summary}
           onChange={(ev) => setSummary(ev.target.value)}
-        />
-        <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
-        <Editor onChange={setContent} value={content} />
-        <button style={{ marginTop: "5px" }}>Update post</button>
-      </form>
+        /> */}
+          <FormControl
+            variant="outlined"
+            fullWidth
+            style={{ marginBottom: "10px", border: "1px solid" }}
+          >
+            <Input type="file" onChange={(ev) => setFiles(ev.target.files)} />
+          </FormControl>
+          <Editor onChange={setContent} value={content} />
+          <button style={{ marginTop: "5px" }}>Update post</button>
+        </form>
+      </Box>
     </Paper>
   );
 }

@@ -21,17 +21,19 @@ import {
   OutlinedInput,
   Box,
   Paper,
+  Input,
 } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 export default function CreatePost() {
   const [title, setTitle] = useState("");
-  const [summary, setSummary] = useState("");
+  // const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState("");
   const [redirect, setRedirect] = useState(false);
   async function createNewPost(ev) {
     const data = new FormData();
     data.set("title", title);
-    data.set("summary", summary);
+    // data.set("summary", summary);
     data.set("content", content);
     data.set("file", files[0]);
     ev.preventDefault();
@@ -52,7 +54,7 @@ export default function CreatePost() {
     <Paper
       className="home-page-container"
       style={{
-        minHeight: "85vh",
+        minHeight: "89vh",
 
         padding: 10,
       }}
@@ -67,19 +69,22 @@ export default function CreatePost() {
         }}
       >
         <form onSubmit={createNewPost}>
-          <input
-            type="title"
-            placeholder={"Title"}
+          <TextField
+            label="Write Your Title Here"
+            variant="outlined"
+            fullWidth
             value={title}
             onChange={(ev) => setTitle(ev.target.value)}
+            style={{ marginBottom: "10px" }}
           />
-          <input
-            type="summary"
-            placeholder={"Summary"}
-            value={summary}
-            onChange={(ev) => setSummary(ev.target.value)}
-          />
-          <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
+
+          <FormControl
+            variant="outlined"
+            fullWidth
+            style={{ marginBottom: "10px", border: "1px solid" }}
+          >
+            <Input type="file" onChange={(ev) => setFiles(ev.target.files)} />
+          </FormControl>
           <div style={{ maxWidth: "800px" }}>
             <Editor value={content} onChange={setContent} />
           </div>

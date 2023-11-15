@@ -85,11 +85,23 @@ export default function PostPage() {
           dangerouslySetInnerHTML={{ __html: postInfo.content }}
         />
       </div> */}
-      <Paper className="home-page-container" elevation={3}>
+      <Paper
+        className="home-page-container"
+        elevation={3}
+        style={{ minHeight: "90vh" }}
+      >
         <Grid container spacing={1}>
-          <Grid item sm={12} md={8} style={{ padding: 5, minHeight: "85vh" }}>
+          <Grid item sm={12} xs={12} md={8} style={{ padding: 5 }}>
             <div className="post-page">
-              <h1>{postInfo.title}</h1>
+              <Typography
+                style={{
+                  textAlign: "left",
+                  wordWrap: "break-word",
+                  maxWidth: "90%",
+                }}
+              >
+                <h1>{postInfo.title}</h1>
+              </Typography>{" "}
               <time>{formatISO9075(new Date(postInfo.createdAt))}</time>
               <div className="author">by @{postInfo.author.username}</div>
               {userInfo.id === postInfo.author._id && (
@@ -121,7 +133,6 @@ export default function PostPage() {
                   </Button>
                 </Stack>
               )}
-
               <div
                 style={{
                   display: "flex",
@@ -136,7 +147,6 @@ export default function PostPage() {
                   alt=""
                 />
               </div>
-
               <div
                 style={{
                   display: "flex",
@@ -159,7 +169,7 @@ export default function PostPage() {
             </div>
           </Grid>
           <Grid item sm={12} xs={12} md={4} style={{ padding: 8 }}>
-            <Typography variant="h6">Similar Post</Typography>
+            <Typography variant="h6">Post You may like</Typography>
             <Divider />
             <Divider />
             <SimilarPost />

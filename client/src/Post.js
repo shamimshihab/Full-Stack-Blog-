@@ -40,15 +40,19 @@ export default function Post({
           md={6}
           style={{
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            // "@media (max-width: 720px)": {
-            //   alignItems: "center",
-            // },
+            flexDirection: "column",
           }}
         >
-          <Box>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "start",
+              alignItems: "flex-start",
+            }}
+          >
             <Link to={`/post/${_id}`}>
               <Button
                 style={{
@@ -57,21 +61,26 @@ export default function Post({
                   padding: 0,
                 }}
               >
-                <h2>{title.substring(0, 25)}</h2>
+                <Typography variant="h5"> {title}</Typography>
               </Button>
             </Link>
-            <p className="infoDetails ">
-              User : <a className="author">{author.username}</a>
-              Time : <time>{formatISO9075(new Date(createdAt))}</time>
-            </p>
-            <p className="summary">{summary.substring(0, 30)}</p>
+            <Typography className="infoDetails ">
+              <a className="author">{author.username}</a>,
+              <time>{formatISO9075(new Date(createdAt))}</time>
+            </Typography>
+            <Typography className="summary">
+              {(
+                new DOMParser().parseFromString(content, "text/html").body
+                  .textContent || ""
+              ).substring(0, 80)}
+            </Typography>
+
             <Link to={`/post/${_id}`}>
               <Button
                 variant="contained"
                 style={{
-                  margin: 0,
+                  marginTop: 20,
                   padding: "4px",
-                  width: "50%",
                   textTransform: "none",
                 }}
               >

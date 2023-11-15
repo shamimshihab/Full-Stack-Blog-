@@ -15,7 +15,7 @@ export default function SimilarPost() {
   return (
     <>
       {posts.length > 0 &&
-        posts.slice(3, 6).map((post) => <SimilarPostItem {...post} />)}
+        posts.slice(0, 5).map((post) => <SimilarPostItem {...post} />)}
     </>
   );
 }

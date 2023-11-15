@@ -13,7 +13,7 @@ export default function IndexPage() {
   }, []);
   return (
     <>
-      <Paper className="home-page-container" style={{ minHeight: "85vh" }}>
+      <Paper className="home-page-container" style={{ minHeight: "89vh" }}>
         {posts.length > 0 && posts.map((post) => <Post {...post} />)}
       </Paper>
     </>
