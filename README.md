@@ -23,6 +23,7 @@ The project can be divided into two parts: frontend and backend.
 This backend system is designed using Node.js and Express, offering a set of RESTful APIs to handle blog post data. MongoDB serves as the database
 
 1. **Running the Backend:**
+
    - Navigate to the `backend` folder using:
      ```
      cd backend
@@ -42,7 +43,7 @@ After running backend, frontend can be started.
 
 2. **Running the Frontend:**
 
-   - Navigate to the `backend` folder using:
+   - Navigate to the `frontend` folder using:
 
      ```
      cd frontend
