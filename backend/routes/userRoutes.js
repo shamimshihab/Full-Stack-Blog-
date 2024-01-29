@@ -4,7 +4,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const salt = bcrypt.genSaltSync(10);
-const secret = "asdfe45we45w345wegw345werjktjwertkj";
+const secret = process.env.SECRET;
+
 // Registration
 router.post("/register", async (req, res) => {
   try {

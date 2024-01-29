@@ -5,6 +5,7 @@ const uploadMiddleware = multer({ dest: "uploads/" });
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const Post = require("../models/Post");
+const secret = process.env.SECRET;
 
 // Create Post
 router.post("/", uploadMiddleware.single("file"), async (req, res) => {
