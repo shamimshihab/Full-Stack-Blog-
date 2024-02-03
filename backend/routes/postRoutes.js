@@ -5,6 +5,8 @@ const uploadMiddleware = multer({ dest: "uploads/" });
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const Post = require("../models/Post");
+const Review = require("../models/Review");
+const { findById } = require("../models/User");
 const secret = process.env.SECRET;
 
 // Create Post
@@ -97,10 +99,54 @@ router.get("/", async (req, res) => {
 });
 
 // Get Post by ID
+// router.get("/:id", async (req, res) => {
+//   const { id } = req.params;
+//   const postDoc = await Post.findById(id).populate(
+//     "author",
+//     ["username"],
+//     "reviews"
+//   );
+//   res.json(postDoc);
+// });
+
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const postDoc = await Post.findById(id).populate("author", ["username"]);
+  const postDoc = await Post.findById(id)
+    .populate({
+      path: "author",
+      select: ["username"],
+    })
+    .populate({
+      path: "review",
+    });
   res.json(postDoc);
+});
+
+//
+router.post("/:id/review/addNew", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const comment = req.body.comment;
+
+    // console.log("its working", id);
+    // console.log("its review", comment);
+
+    const findPost = await Post.findById(id).exec(); // Await and use .exec()
+    const reviewDoc = await Review.create({ comment });
+
+    // console.log("findpost", findPost);
+    // console.log("findpost", reviewDoc);
+
+    findPost.review.push(reviewDoc); // Now findPost is the actual document, not a Query
+    const pushReviewToPost = await findPost.save();
+
+    // console.log("pushReviewToPost", pushReviewToPost);
+
+    res.json(reviewDoc);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 module.exports = router;

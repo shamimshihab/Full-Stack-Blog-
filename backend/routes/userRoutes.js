@@ -10,6 +10,13 @@ const secret = process.env.SECRET;
 router.post("/register", async (req, res) => {
   try {
     const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ error: "Username and password are required" });
+    }
+
     const userDoc = await User.create({
       username,
       password: bcrypt.hashSync(password, salt),

@@ -3,7 +3,15 @@ import { Navigate, useParams } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
 import { UserContext } from "../UserContext";
 import { Link } from "react-router-dom";
-import { Typography, Box, Paper, Button, Grid, Stack } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Paper,
+  Button,
+  Grid,
+  Stack,
+  TextField,
+} from "@mui/material";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
@@ -14,6 +22,7 @@ export default function PostPage() {
   const [postInfo, setPostInfo] = useState(null);
   const { userInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
+  const [comment, setComment] = useState("");
   const { id } = useParams();
   useEffect(() => {
     fetch(`http://localhost:4000/post/${id}`).then((response) => {
@@ -26,7 +35,7 @@ export default function PostPage() {
   if (!postInfo) return "";
   console.log("outputid", id);
   async function deletePost() {
-    const response = await fetch("http://localhost:4000/post/" + id, {
+    const response = await fetch("http://localhost:4000/post/${id}" + id, {
       method: "DELETE",
       credentials: "include",
     });
@@ -44,6 +53,29 @@ export default function PostPage() {
     return doc.body.textContent || "";
   }
   const sanitizedContent = sanitizeHTML(postInfo.content);
+
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  const handleSave = async (ev) => {
+    ev.preventDefault();
+
+    const response = await fetch(
+      `http://localhost:4000/post/${id}/review/addNew`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ comment }),
+      }
+    );
+    if (response.ok) {
+      console.log("saved");
+    }
+  };
+
   return (
     <>
       <Paper
@@ -127,6 +159,26 @@ export default function PostPage() {
                   {sanitizedContent}
                 </Typography>{" "}
               </div>
+              <Box>
+                <form>
+                  <TextField
+                    label="Write your comment"
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    rows={4}
+                    value={comment}
+                    onChange={handleCommentChange}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSave}
+                  >
+                    Save
+                  </Button>
+                </form>
+              </Box>
             </div>
           </Grid>
           <Grid item sm={12} xs={12} md={4} style={{ padding: 8 }}>
