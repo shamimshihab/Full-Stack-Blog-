@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams, useNavigate } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
 import { UserContext } from "../UserContext";
 import { Link } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
 import {
   Typography,
   Box,
@@ -19,6 +20,7 @@ import Divider from "@mui/material/Divider";
 
 import SimilarPost from "../SimilarPost";
 export default function PostPage() {
+  const navigate = useNavigate();
   const [postInfo, setPostInfo] = useState(null);
   const { userInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
@@ -28,6 +30,7 @@ export default function PostPage() {
     fetch(`http://localhost:4000/post/${id}`).then((response) => {
       response.json().then((postInfo) => {
         setPostInfo(postInfo);
+        console.log("postInfo", postInfo);
       });
     });
   }, [id]);
@@ -35,7 +38,7 @@ export default function PostPage() {
   if (!postInfo) return "";
   console.log("outputid", id);
   async function deletePost() {
-    const response = await fetch("http://localhost:4000/post/${id}" + id, {
+    const response = await fetch("http://localhost:4000/post/" + id, {
       method: "DELETE",
       credentials: "include",
     });
@@ -71,11 +74,31 @@ export default function PostPage() {
         body: JSON.stringify({ comment }),
       }
     );
+
     if (response.ok) {
-      console.log("saved");
+      // Wait for the new comment to be added, then fetch the updated post information
+      await fetch(`http://localhost:4000/post/${id}`).then((response) => {
+        if (response.ok) {
+          response.json().then((postInfo) => {
+            setPostInfo(postInfo);
+          });
+        }
+      });
+      setComment("");
+      navigate(`/post/${id}`);
     }
   };
-
+  function formatDate(dateString) {
+    const options = {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    return new Date(dateString).toLocaleString("en-US", options);
+  }
   return (
     <>
       <Paper
@@ -166,7 +189,7 @@ export default function PostPage() {
                     variant="outlined"
                     fullWidth
                     multiline
-                    rows={4}
+                    rows={3}
                     value={comment}
                     onChange={handleCommentChange}
                   />
@@ -178,6 +201,33 @@ export default function PostPage() {
                     Save
                   </Button>
                 </form>
+              </Box>
+              <Box style={{ marginTop: "1.5rem" }}>
+                {postInfo.review?.map((review) => (
+                  <Stack
+                    key={review._id}
+                    direction="row"
+                    spacing={2}
+                    alignItems="center"
+                    marginBottom={2}
+                    padding={2}
+                    border={1}
+                    borderColor="grey.300"
+                  >
+                    <Avatar />
+
+                    <Stack direction="column">
+                      {" "}
+                      <Typography>{review.comment}</Typography>
+                      <Typography
+                        variant="body2"
+                        style={{ fontSize: "0.8rem" }}
+                      >
+                        {formatDate(review.createdAt)}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                ))}
               </Box>
             </div>
           </Grid>
