@@ -1,9 +1,18 @@
 import { useContext, useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams, useNavigate } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
 import { UserContext } from "../UserContext";
 import { Link } from "react-router-dom";
-import { Typography, Box, Paper, Button, Grid, Stack } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import {
+  Typography,
+  Box,
+  Paper,
+  Button,
+  Grid,
+  Stack,
+  TextField,
+} from "@mui/material";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
@@ -11,14 +20,17 @@ import Divider from "@mui/material/Divider";
 
 import SimilarPost from "../SimilarPost";
 export default function PostPage() {
+  const navigate = useNavigate();
   const [postInfo, setPostInfo] = useState(null);
   const { userInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
+  const [comment, setComment] = useState("");
   const { id } = useParams();
   useEffect(() => {
     fetch(`http://localhost:4000/post/${id}`).then((response) => {
       response.json().then((postInfo) => {
         setPostInfo(postInfo);
+        console.log("postInfo", postInfo);
       });
     });
   }, [id]);
@@ -44,6 +56,49 @@ export default function PostPage() {
     return doc.body.textContent || "";
   }
   const sanitizedContent = sanitizeHTML(postInfo.content);
+
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  const handleSave = async (ev) => {
+    ev.preventDefault();
+
+    const response = await fetch(
+      `http://localhost:4000/post/${id}/review/addNew`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ comment }),
+      }
+    );
+
+    if (response.ok) {
+      // Wait for the new comment to be added, then fetch the updated post information
+      await fetch(`http://localhost:4000/post/${id}`).then((response) => {
+        if (response.ok) {
+          response.json().then((postInfo) => {
+            setPostInfo(postInfo);
+          });
+        }
+      });
+      setComment("");
+      navigate(`/post/${id}`);
+    }
+  };
+  function formatDate(dateString) {
+    const options = {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    return new Date(dateString).toLocaleString("en-US", options);
+  }
   return (
     <>
       <Paper
@@ -127,6 +182,53 @@ export default function PostPage() {
                   {sanitizedContent}
                 </Typography>{" "}
               </div>
+              <Box>
+                <form>
+                  <TextField
+                    label="Write your comment"
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    rows={3}
+                    value={comment}
+                    onChange={handleCommentChange}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSave}
+                  >
+                    Save
+                  </Button>
+                </form>
+              </Box>
+              <Box style={{ marginTop: "1.5rem" }}>
+                {postInfo.review?.map((review) => (
+                  <Stack
+                    key={review._id}
+                    direction="row"
+                    spacing={2}
+                    alignItems="center"
+                    marginBottom={2}
+                    padding={2}
+                    border={1}
+                    borderColor="grey.300"
+                  >
+                    <Avatar />
+
+                    <Stack direction="column">
+                      {" "}
+                      <Typography>{review.comment}</Typography>
+                      <Typography
+                        variant="body2"
+                        style={{ fontSize: "0.8rem" }}
+                      >
+                        {formatDate(review.createdAt)}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                ))}
+              </Box>
             </div>
           </Grid>
           <Grid item sm={12} xs={12} md={4} style={{ padding: 8 }}>
