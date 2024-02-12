@@ -32,18 +32,10 @@ const Footer = () => {
         backgroundColor: theme.palette.mode === "dark" ? "#05A6F1 " : "#C5E8F8",
       }}
     >
-      <Grid
-        container
-        className="footer-container"
-        // style={{
-        //   display: "flex",
-        //   alignItems: "center",
-        //   justifyContent: "space-between",
-        // }}
-      >
+      <Grid container className="footer-container">
         <Grid item xs={12} md={6} className="footeer-first-container">
           <Typography variant="body1">
-            MyBlog - Developed by Shamim @2023
+            MyBlog - Developed by Shamim @2024
           </Typography>
         </Grid>
         <Grid item xs={12} md={6} className="icon-container">
