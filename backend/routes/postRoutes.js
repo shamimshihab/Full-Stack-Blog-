@@ -50,10 +50,15 @@ router.put("/", uploadMiddleware.single("file"), async (req, res) => {
     }
 
     const { token } = req.cookies;
+
+    console.log(" req.cookies", req.cookies);
     jwt.verify(token, secret, {}, async (err, info) => {
       if (err) throw err;
       const { id, title, summary, content } = req.body;
       const postDoc = await Post.findById(id);
+
+      console.log("id", id);
+      console.log("postDoc22", postDoc.author);
       const isAuthor =
         JSON.stringify(postDoc.author) === JSON.stringify(info.id);
       if (!isAuthor) {
@@ -75,18 +80,43 @@ router.put("/", uploadMiddleware.single("file"), async (req, res) => {
 });
 
 // Delete Post
-router.delete("/:id", async (req, res) => {
-  const postId = req.params.id;
-
+router.delete("/:id", uploadMiddleware.single("file"), async (req, res) => {
+  const { token } = req.cookies;
   try {
-    await Post.findByIdAndDelete(postId);
-    res.json({ message: "Post deleted successfully" });
+    jwt.verify(token, secret, {}, async (err, info) => {
+      const { id } = req.params;
+      if (err) throw err;
+      const postDoc = await Post.findById(id);
+      const isAuthor =
+        postDoc && postDoc.author && postDoc.author.equals(info.id);
+      if (!isAuthor) {
+        return res.status(400).json("You are not the author");
+      }
+
+      await Post.findByIdAndDelete(id);
+      res.json({ message: "Post deleted successfully" });
+    });
   } catch (error) {
     res
       .status(500)
       .json({ error: "An error occurred while deleting the post" });
   }
 });
+router.post(
+  "/addNew",
+
+  async (req, res) => {
+    try {
+      const { token } = req.cookies;
+
+      console.log(" req.cookies", req.cookies);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "An error occurred while deleting the post" });
+    }
+  }
+);
 
 // Get Posts
 router.get("/", async (req, res) => {
@@ -98,17 +128,6 @@ router.get("/", async (req, res) => {
   );
 });
 
-// Get Post by ID
-// router.get("/:id", async (req, res) => {
-//   const { id } = req.params;
-//   const postDoc = await Post.findById(id).populate(
-//     "author",
-//     ["username"],
-//     "reviews"
-//   );
-//   res.json(postDoc);
-// });
-
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   const postDoc = await Post.findById(id)
@@ -118,34 +137,76 @@ router.get("/:id", async (req, res) => {
     })
     .populate({
       path: "review",
+      options: { sort: { createdAt: -1 } },
     });
+
   res.json(postDoc);
 });
 
-//
-router.post("/:id/review/addNew", async (req, res) => {
+router.post(
+  "/:id/review/addNew",
+  uploadMiddleware.single("file"),
+  async (req, res) => {
+    try {
+      const { token } = req.cookies;
+
+      console.log(" req.cookies", req.cookies);
+
+      const { id } = req.params;
+      const comment = req.body.comment;
+
+      console.log("token", token);
+
+      jwt.verify(token, secret, {}, async (err, info) => {
+        console.log("infoID", info);
+        const findPost = await Post.findById(id).exec();
+        const reviewDoc = await Review.create({
+          comment,
+          author: info.username,
+          authorID: info.id,
+        });
+
+        findPost.review.push(reviewDoc);
+        const pushReviewToPost = await findPost.save();
+
+        res.json(reviewDoc);
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "An error occurred while deleting the post" });
+    }
+  }
+);
+
+router.delete("/:postId/review/:reviewId", async (req, res) => {
   try {
-    const { id } = req.params;
-    const comment = req.body.comment;
+    const { postId, reviewId } = req.params;
 
-    // console.log("its working", id);
-    // console.log("its review", comment);
+    const post = await Post.findById(postId);
 
-    const findPost = await Post.findById(id).exec(); // Await and use .exec()
-    const reviewDoc = await Review.create({ comment });
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
 
-    // console.log("findpost", findPost);
-    // console.log("findpost", reviewDoc);
+    const review = await Review.findById(reviewId);
 
-    findPost.review.push(reviewDoc); // Now findPost is the actual document, not a Query
-    const pushReviewToPost = await findPost.save();
+    if (!review) {
+      return res.status(404).json({ error: "Review not found" });
+    }
 
-    // console.log("pushReviewToPost", pushReviewToPost);
+    post.review.pull(reviewId);
 
-    res.json(reviewDoc);
+    await post.save();
+
+    await Review.findByIdAndDelete(reviewId);
+
+    res.json({ message: "Review deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the review" });
   }
 });
 

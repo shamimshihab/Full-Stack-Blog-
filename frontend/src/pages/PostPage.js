@@ -24,6 +24,8 @@ export default function PostPage() {
   const [postInfo, setPostInfo] = useState(null);
   const { userInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
+
+  const [reloadData, setReloadData] = useState(false);
   const [comment, setComment] = useState("");
   const { id } = useParams();
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function PostPage() {
         console.log("postInfo", postInfo);
       });
     });
-  }, [id]);
+  }, [id, reloadData]);
 
   if (!postInfo) return "";
   console.log("outputid", id);
@@ -61,31 +63,54 @@ export default function PostPage() {
     setComment(event.target.value);
   };
 
-  const handleSave = async (ev) => {
+  const reviewDelete = async (ev, reviewId) => {
     ev.preventDefault();
 
     const response = await fetch(
-      `http://localhost:4000/post/${id}/review/addNew`,
+      `http://localhost:4000/post/${id}/review/${reviewId}`,
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ comment }),
+        method: "DELETE",
+        credentials: "include",
       }
     );
 
     if (response.ok) {
-      // Wait for the new comment to be added, then fetch the updated post information
-      await fetch(`http://localhost:4000/post/${id}`).then((response) => {
-        if (response.ok) {
-          response.json().then((postInfo) => {
-            setPostInfo(postInfo);
-          });
-        }
-      });
-      setComment("");
+      // window.location.reload();
+      setReloadData(true);
       navigate(`/post/${id}`);
+    }
+    console.log("review deleted");
+  };
+  const handleSave = async (ev) => {
+    ev.preventDefault();
+
+    if (comment.trim() !== "") {
+      // Perform save operation
+
+      const response = await fetch(
+        `http://localhost:4000/post/${id}/review/addNew`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ comment }),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        // Wait for the new comment to be added, then fetch the updated post information
+        await fetch(`http://localhost:4000/post/${id}`).then((response) => {
+          if (response.ok) {
+            response.json().then((postInfo) => {
+              setPostInfo(postInfo);
+            });
+          }
+        });
+        setComment("");
+        navigate(`/post/${id}`);
+      }
     }
   };
   function formatDate(dateString) {
@@ -182,53 +207,119 @@ export default function PostPage() {
                   {sanitizedContent}
                 </Typography>{" "}
               </div>
-              <Box>
-                <form>
-                  <TextField
-                    label="Write your comment"
-                    variant="outlined"
-                    fullWidth
-                    multiline
-                    rows={3}
-                    value={comment}
-                    onChange={handleCommentChange}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSave}
-                  >
-                    Save
-                  </Button>
-                </form>
-              </Box>
-              <Box style={{ marginTop: "1.5rem" }}>
-                {postInfo.review?.map((review) => (
-                  <Stack
-                    key={review._id}
-                    direction="row"
-                    spacing={2}
-                    alignItems="center"
-                    marginBottom={2}
-                    padding={2}
-                    border={1}
-                    borderColor="grey.300"
-                  >
-                    <Avatar />
+              {userInfo.id ? (
+                <>
+                  <div
+                    style={{
+                      // display: "flex",
+                      // justifyContent: "center",
 
-                    <Stack direction="column">
-                      {" "}
-                      <Typography>{review.comment}</Typography>
-                      <Typography
-                        variant="body2"
-                        style={{ fontSize: "0.8rem" }}
+                      margin: 8,
+                      padding: 3,
+                    }}
+                  >
+                    <form>
+                      <TextField
+                        required
+                        label="Write your comment"
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        rows={3}
+                        value={comment}
+                        onChange={handleCommentChange}
+                      />
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSave}
+                        style={{ marginTop: "1rem" }}
                       >
-                        {formatDate(review.createdAt)}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                ))}
-              </Box>
+                        Save
+                      </Button>
+                    </form>
+                  </div>
+
+                  <div
+                    style={{
+                      // display: "flex",
+                      // justifyContent: "center",
+
+                      margin: 8,
+                      padding: 3,
+                    }}
+                  >
+                    <Box style={{ marginTop: "1.5rem" }}>
+                      {postInfo.review?.map((review) => (
+                        <Stack
+                          key={review._id}
+                          direction="row"
+                          spacing={2}
+                          alignItems="center"
+                          marginBottom={2}
+                          padding={2}
+                          border={1}
+                          borderColor="grey.300"
+                        >
+                          {" "}
+                          {console.log("review ", review)}
+                          <Stack direction="column" style={{ width: "10%" }}>
+                            <Avatar />
+                          </Stack>
+                          <Stack
+                            style={{
+                              width: "90%",
+                              display: "flex",
+                              flexDirection: "column",
+                              flexWrap: "wrap",
+                            }}
+                          >
+                            {" "}
+                            <Typography
+                              style={{
+                                marginBottom: "0.3rem",
+
+                                whiteSpace: "normal",
+                                overflowWrap: "break-word",
+                              }}
+                            >
+                              {review.author}
+                            </Typography>
+                            <Typography
+                              style={{
+                                marginBottom: "0.2rem",
+
+                                whiteSpace: "normal",
+                                overflowWrap: "break-word",
+                              }}
+                            >
+                              {review.comment}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              style={{ marginBottom: "0.2rem" }}
+                            >
+                              {formatDate(review.createdAt)}
+                            </Typography>
+                            {userInfo.id === review.authorID && (
+                              <button
+                                style={{ maxWidth: "15%" }}
+                                onClick={(ev) => {
+                                  reviewDelete(ev, review._id);
+                                }}
+                              >
+                                Delete
+                              </button>
+                            )}
+                          </Stack>
+                        </Stack>
+                      ))}
+                    </Box>
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
             </div>
           </Grid>
           <Grid item sm={12} xs={12} md={4} style={{ padding: 8 }}>

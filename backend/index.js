@@ -1,5 +1,7 @@
 require("dotenv").config();
-
+const userRoutes = require("./routes/userRoutes");
+const postRoutes = require("./routes/postRoutes");
+const aboutMeRoutes = require("./routes/aboutMeRoutes");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -15,7 +17,6 @@ const uploadMiddleware = multer({ dest: "uploads/" });
 const fs = require("fs");
 
 const salt = bcrypt.genSaltSync(10);
-// const secret = "asdfe45we45w345wegw345werjktjwertkj";
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
@@ -23,6 +24,11 @@ app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
 mongoose.connect(process.env.MONGODB_URI);
+
+// Use routes
+app.use("/user", userRoutes);
+app.use("/post", postRoutes);
+app.use("/aboutMe", aboutMeRoutes);
 
 // mongoose.connect(
 //   "mongodb+srv://shamimshihab56:shihabblog56@cluster0.pgwf0fs.mongodb.net/?retryWrites=true&w=majority"
@@ -172,13 +178,5 @@ mongoose.connect(process.env.MONGODB_URI);
 // });
 
 // Routes
-const userRoutes = require("./routes/userRoutes");
-const postRoutes = require("./routes/postRoutes");
-const aboutMeRoutes = require("./routes/aboutMeRoutes");
-
-// Use routes
-app.use("/user", userRoutes);
-app.use("/post", postRoutes);
-app.use("/aboutMe", aboutMeRoutes);
 
 app.listen(4000);
