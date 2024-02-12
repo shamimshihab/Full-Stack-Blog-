@@ -142,7 +142,7 @@ export default function PostPage() {
                 }}
               >
                 <h1>{postInfo.title}</h1>
-              </Typography>{" "}
+              </Typography>
               <time>{formatISO9075(new Date(postInfo.createdAt))}</time>
               <div className="author">by @{postInfo.author.username}</div>
               {userInfo.id === postInfo.author._id && (
@@ -192,7 +192,6 @@ export default function PostPage() {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-
                   margin: 8,
                   padding: 3,
                 }}
@@ -205,121 +204,95 @@ export default function PostPage() {
                   }}
                 >
                   {sanitizedContent}
-                </Typography>{" "}
+                </Typography>
               </div>
-              {userInfo.id ? (
-                <>
-                  <div
-                    style={{
-                      // display: "flex",
-                      // justifyContent: "center",
-
-                      margin: 8,
-                      padding: 3,
-                    }}
-                  >
-                    <form>
-                      <TextField
-                        required
-                        label="Write your comment"
-                        variant="outlined"
-                        fullWidth
-                        multiline
-                        rows={3}
-                        value={comment}
-                        onChange={handleCommentChange}
-                      />
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSave}
-                        style={{ marginTop: "1rem" }}
-                      >
-                        Save
-                      </Button>
-                    </form>
-                  </div>
-
-                  <div
-                    style={{
-                      // display: "flex",
-                      // justifyContent: "center",
-
-                      margin: 8,
-                      padding: 3,
-                    }}
-                  >
-                    <Box style={{ marginTop: "1.5rem" }}>
-                      {postInfo.review?.map((review) => (
-                        <Stack
-                          key={review._id}
-                          direction="row"
-                          spacing={2}
-                          alignItems="center"
-                          marginBottom={2}
-                          padding={2}
-                          border={1}
-                          borderColor="grey.300"
-                        >
-                          {" "}
-                          {console.log("review ", review)}
-                          <Stack direction="column" style={{ width: "10%" }}>
-                            <Avatar />
-                          </Stack>
-                          <Stack
-                            style={{
-                              width: "90%",
-                              display: "flex",
-                              flexDirection: "column",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            {" "}
-                            <Typography
-                              style={{
-                                marginBottom: "0.3rem",
-
-                                whiteSpace: "normal",
-                                overflowWrap: "break-word",
-                              }}
-                            >
-                              {review.author}
-                            </Typography>
-                            <Typography
-                              style={{
-                                marginBottom: "0.2rem",
-
-                                whiteSpace: "normal",
-                                overflowWrap: "break-word",
-                              }}
-                            >
-                              {review.comment}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              style={{ marginBottom: "0.2rem" }}
-                            >
-                              {formatDate(review.createdAt)}
-                            </Typography>
-                            {userInfo.id === review.authorID && (
-                              <button
-                                style={{ maxWidth: "15%" }}
-                                onClick={(ev) => {
-                                  reviewDelete(ev, review._id);
-                                }}
-                              >
-                                Delete
-                              </button>
-                            )}
-                          </Stack>
-                        </Stack>
-                      ))}
-                    </Box>
-                  </div>
-                </>
-              ) : (
-                <></>
+              {userInfo.id && (
+                <div style={{ margin: 8, padding: 3 }}>
+                  <form>
+                    <TextField
+                      required
+                      label="Write your comment"
+                      variant="outlined"
+                      fullWidth
+                      multiline
+                      rows={3}
+                      value={comment}
+                      onChange={handleCommentChange}
+                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSave}
+                      style={{ marginTop: "1rem" }}
+                    >
+                      Save
+                    </Button>
+                  </form>
+                </div>
               )}
+            </div>
+            <div style={{ margin: 8, padding: 3 }}>
+              <Box style={{ marginTop: "1.5rem" }}>
+                {postInfo.review?.map((review) => (
+                  <Stack
+                    key={review._id}
+                    direction="row"
+                    spacing={2}
+                    alignItems="center"
+                    marginBottom={2}
+                    padding={2}
+                    border={1}
+                    borderColor="grey.300"
+                  >
+                    <Stack direction="column" style={{ width: "10%" }}>
+                      <Avatar />
+                    </Stack>
+                    <Stack
+                      style={{
+                        width: "90%",
+                        display: "flex",
+                        flexDirection: "column",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <Typography
+                        style={{
+                          marginBottom: "0.3rem",
+                          whiteSpace: "normal",
+                          overflowWrap: "break-word",
+                        }}
+                      >
+                        {review.author}
+                      </Typography>
+                      <Typography
+                        style={{
+                          marginBottom: "0.2rem",
+                          whiteSpace: "normal",
+                          overflowWrap: "break-word",
+                        }}
+                      >
+                        {review.comment}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        style={{ marginBottom: "0.2rem" }}
+                      >
+                        {formatDate(review.createdAt)}
+                      </Typography>
+                      {userInfo.id === review.authorID && (
+                        <button
+                          style={{ maxWidth: "15%" }}
+                          onClick={(ev) => {
+                            reviewDelete(ev, review._id);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </Stack>
+                  </Stack>
+                ))}
+              </Box>
             </div>
           </Grid>
           <Grid item sm={12} xs={12} md={4} style={{ padding: 8 }}>

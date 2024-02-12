@@ -102,6 +102,7 @@ router.delete("/:id", uploadMiddleware.single("file"), async (req, res) => {
       .json({ error: "An error occurred while deleting the post" });
   }
 });
+
 router.post(
   "/addNew",
 
