@@ -69,4 +69,4 @@ After running backend, frontend can be started.
 - **Read Full Blog Post**: Clicking on a blog post redirects the user to a new page displaying the full content of the blog post.
 - **Edit and Delete Posts**: Only logged-in users have the ability to edit or delete their blog posts from the individual post page.
 - **Change Theme**: Users have the option to switch between light and dark themes for better readability.
-- **Password Security**: User passwords are securely hashed and stored in the MongoDB database.
+- **Comment on Posts**: Authenticated users can comment on any available post to express themselves. Comments are displayed at the end of the post. Only the person who commented can delete their comment.
